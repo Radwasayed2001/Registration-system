@@ -34,6 +34,21 @@ else if (!emailVal($_POST['email']))
 {
     $errors[] = "Enter Valid Email";
 }
+$csvFilePath = '../data/users.csv';
+$data = [];
+
+if (($handle = fopen($csvFilePath, 'r')) !== false) {
+    while (($row = fgetcsv($handle)) !== false) {
+        $data[] = $row;
+    }
+    fclose($handle);
+}
+foreach ($data as $user){
+    if ($user[1] === $email) {
+        $errors[] = "email is already exsits";
+    }
+}
+
 if (!empty($errors)) {
     $_SESSION['errors'] = $errors;
     redirect("../Register.php");
